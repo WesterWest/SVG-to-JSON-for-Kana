@@ -7,6 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <ListBox x:Name="shapesList" HorizontalAlignment="Left" Margin="10,10,0,10" Width="131">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Name}" />
+                        <TextBlock Text="{Binding Path=Collide}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid x:Name="rightSideGrid" Margin="146,10,10,103">
+            <CheckBox x:Name="collideCheckBox" Content="Collide" HorizontalAlignment="Left" Margin="78,69,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=Collide}"/>
+            <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="78,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding Path=Name}"/>
+        </Grid>
+        <Button x:Name="loadButton" Content="Load" HorizontalAlignment="Left" Height="43" Margin="146,266,0,0" VerticalAlignment="Top" Width="119" Click="openDialog"/>
+        <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Height="43" Margin="400,266,0,0" VerticalAlignment="Top" Width="107" Click="export"/>
+
     </Grid>
 </Window>
