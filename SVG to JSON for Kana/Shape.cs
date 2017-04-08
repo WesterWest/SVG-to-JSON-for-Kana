@@ -13,6 +13,7 @@ namespace SVG_to_JSON_for_Kana
         public List<Point> UVs { get; set; }
 
         public bool Collide { get; set; }
+        public bool GenerateUVs { get; set; }
         public String Name { get; set; }
     }
 }

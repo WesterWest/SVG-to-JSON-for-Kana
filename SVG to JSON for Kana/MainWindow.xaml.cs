@@ -29,6 +29,7 @@ namespace SVG_to_JSON_for_Kana
     {
         ObservableCollection<Shape> shapes = new ObservableCollection<Shape>();
         String path;
+
         public MainWindow()
         {
             openDialog();
@@ -57,12 +58,12 @@ namespace SVG_to_JSON_for_Kana
         private void deserializeSVG(String path)
         {
             XmlDocument document = new XmlDocument();
-            
+
             document.Load(path);
-            XmlNodeList rects =  document.GetElementsByTagName("rect");
+            XmlNodeList rects = document.GetElementsByTagName("rect");
             XmlNodeList polygons = document.GetElementsByTagName("polygon");
 
-            foreach(XmlNode rect in rects)
+            foreach (XmlNode rect in rects)
             {
                 double x = double.Parse(rect.Attributes["x"].Value);
                 double y = double.Parse(rect.Attributes["y"].Value);
@@ -74,7 +75,7 @@ namespace SVG_to_JSON_for_Kana
                 points.Add(new Point(x + width, y + height));
                 points.Add(new Point(x, y + height));
 
-                shapes.Add(new Shape() { Points = points, Collide = true, Name = "Untitled", UVs = new List<Point>(points.Count)});
+                shapes.Add(new Shape() { Points = points, Collide = true, Name = "Untitled", UVs = new List<Point>(points.Count) });
             }
 
 
@@ -82,9 +83,9 @@ namespace SVG_to_JSON_for_Kana
             {
                 String[] pointsString = polygon.Attributes["points"].Value.Split(' ');
                 List<Point> points = new List<Point>();
-                foreach(String point in pointsString)
+                foreach (String point in pointsString)
                 {
-                    String[] cords =  point.Split(',');
+                    String[] cords = point.Split(',');
                     points.Add(new Point(Int32.Parse(cords[0]), Int32.Parse(cords[1])));
                 }
 
@@ -99,6 +100,8 @@ namespace SVG_to_JSON_for_Kana
 
         private void export(object sender, RoutedEventArgs e)
         {
+            generateUVs();
+
             JObject jObject = new JObject();
             jObject.Add("name", "penis");
             JArray partsArray = new JArray();
@@ -122,6 +125,49 @@ namespace SVG_to_JSON_for_Kana
             {
                 sw.Write(JsonConvert.SerializeObject(jObject, Newtonsoft.Json.Formatting.Indented));
             }
+        }
+
+        private void generateUVs()
+        {
+            List<Point> borderPoints = calculateBorderPoints();
+            foreach (Shape shape in shapes)
+            {
+                if (shape.GenerateUVs)
+                    foreach (Point point in shape.Points)
+                    {
+                        shape.UVs.Add(new Point((point.X - borderPoints[0].X) / borderPoints[1].X, (point.Y - borderPoints[0].Y) / borderPoints[1].Y));
+                    }
+            }
+        }
+
+        private List<Point> calculateBorderPoints()
+        {
+            List<Point> borderPoints = new List<Point>();
+            List<double> borderCoords = new List<double>() { 0, 0, 0, 0 };
+
+
+            foreach (Shape shape in shapes)
+            {
+                if (shape.GenerateUVs)
+                    foreach (Point point in shape.Points)
+                    {
+                        if (point.X < borderCoords[0])
+                            borderCoords[0] = point.X;
+                        else if (point.X > borderCoords[2])
+                            borderCoords[2] = point.X;
+
+
+                        if (point.Y < borderCoords[1])
+                            borderCoords[1] = point.Y;
+                        else if (point.Y > borderCoords[3])
+                            borderCoords[3] = point.Y;
+                    }
+            }
+
+            borderPoints.Add(new Point(borderCoords[0], borderCoords[1]));
+            borderPoints.Add(new Point(borderCoords[2], borderCoords[3]));
+
+            return borderPoints;
         }
     }
 }

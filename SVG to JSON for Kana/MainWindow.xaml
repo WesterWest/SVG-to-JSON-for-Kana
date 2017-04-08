@@ -20,9 +20,9 @@
         <Grid x:Name="rightSideGrid" Margin="146,10,10,103">
             <CheckBox x:Name="collideCheckBox" Content="Collide" HorizontalAlignment="Left" Margin="78,69,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=Collide}"/>
             <TextBox x:Name="nameTextBox" HorizontalAlignment="Left" Height="23" Margin="78,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Text="{Binding Path=Name}"/>
+            <CheckBox x:Name="UVsShapeCheckBox" Content="Generate UVs" HorizontalAlignment="Left" Margin="78,89,0,0" VerticalAlignment="Top" IsChecked="{Binding Path=GenerateUVs}"/>
         </Grid>
-        <Button x:Name="loadButton" Content="Load" HorizontalAlignment="Left" Height="43" Margin="146,266,0,0" VerticalAlignment="Top" Width="119" Click="openDialog"/>
-        <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Left" Height="43" Margin="400,266,0,0" VerticalAlignment="Top" Width="107" Click="export"/>
-
+        <Button x:Name="loadButton" Content="Load" Margin="0,0,252,10" Click="openDialog" HorizontalAlignment="Right" Width="119" Height="43" VerticalAlignment="Bottom"/>
+        <Button x:Name="exportButton" Content="Export" Margin="0,0,10,10" Click="export" Height="43" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="107"/>
     </Grid>
 </Window>
